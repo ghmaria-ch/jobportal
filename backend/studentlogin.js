@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
@@ -15,7 +15,7 @@ app.use(cors());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '', // Set your MySQL password
+  password: 'khris@mysql23#M', // Set your MySQL password
   database: 'job_portal',
 });
 
@@ -53,7 +53,11 @@ app.post('/api/students/login', (req, res) => {
 
     const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
 
-    res.json({ message: 'Login successful', token });
+    res.json({ message: 'Login successful', token ,
+      id: user.id,          // Add user id to response
+      name: user.name,      // Add user name to response
+      email: user.email,  
+    });
   });
 });
 
@@ -61,6 +65,9 @@ app.post('/api/students/login', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+require('dotenv').config();
+
 
 
 

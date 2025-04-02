@@ -73,12 +73,16 @@ const Login = () => {
   return (
     <>
       <Header />
+    
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200">
         <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl p-10 max-w-md w-full">
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">Welcome to CampusJobs</h2>
-
           <h3 className="text-lg font-medium text-gray-600 text-center mb-4">Login as:</h3>
           <div className="flex justify-center space-x-4">
+          <button
+          onClick={()=>navigate("/adminlogin")}
+          className="px-6 py-3 text-lg font-semibold rounded-full bg-gray-700 text-white shadow-md transition-all hover:bg-blue-600 hover:scale-105"
+          >Admin</button>
             <button
               onClick={() => navigate('/studentlogin')}
               className="px-6 py-3 text-lg font-semibold rounded-full bg-gray-700 text-white shadow-md transition-all hover:bg-blue-600 hover:scale-105"

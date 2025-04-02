@@ -13,6 +13,8 @@ import StudentDashboard from './pages/StudentDashBoard';
 import RecruiterDashboard from './pages/RecruiterDashBorad';
 import StudentProfile from './pages/StudentProfile';
 import EditProfile from './pages/EditProfile';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/recruiterdashboard" element={<RecruiterDashboard/>} />
             <Route path="/studentprofile" element={<StudentProfile/>}/>
             <Route path="/editprofile" element={<EditProfile/>}/>
+            <Route path="/adminlogin" element={<AdminLogin/>}/>
+            <Route path="/admindashboard" element={<AdminDashboard/>}/>
           </Routes>
         </main>
       </div>

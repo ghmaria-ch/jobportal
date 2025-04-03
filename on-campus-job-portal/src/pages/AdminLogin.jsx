@@ -1,7 +1,7 @@
 
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ const AdminLogin = () => {
   });
 
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state for login button
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,62 +18,50 @@ const AdminLogin = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-//     if (!formData.email || !formData.password) {
-//       setError('Please fill in both fields.');
-//       return;
-//     }
+    if (!formData.email || !formData.password) {
+      setError('Please fill in both fields.');
+      return;
+    }
 
-//     setLoading(true); // Set loading to true when submitting the form
-//     setError(''); // Reset previous errors
+    setLoading(true);
+    setError('');
 
-//     try {
-//       // Send login credentials to the backend
-//       const response = await fetch('http://localhost:5000/api/students/login', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(formData), // Send email and password
-//       });
+    try {
+      const response = await axios.post('http://localhost:5000/auth/login', {
+        email: formData.email,
+        password: formData.password,
+        role: 'admin', // Ensure login is role-specific
+      });
 
-//       const data = await response.json(); // Parse the response
+      const data = response.data;
+      console.log(data)
 
-//       if (!response.ok) {
-//         // If response is not ok (e.g. invalid credentials)
-//         throw new Error(data.message || 'Login failed');
-//       }
+      // Store JWT and user details in localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('adminName', data.user.name);
+      localStorage.setItem('adminEmail', data.user.email);
+      localStorage.setItem("adminId", data.user.id); // Keep only this one  
 
-//       // Store JWT token in local storage
-//       console.log(data)
-//       localStorage.setItem('token', data.token);
-//       localStorage.setItem('studentName', data.name);
-//       localStorage.setItem('studentEmail',data.email);
-//       localStorage.setItem('studentID',data.id)
 
-//       // Redirect to the student dashboard
-//       navigate('/studentdashboard');
-//     } catch (error) {
-//       // Handle error (invalid login credentials, etc.)
-//       setError(error.message);
-//     } finally {
-//       setLoading(false); // Set loading to false after response
-//     }
-//   };
+      navigate('/admindashboard');
+    } catch (error) {
+      setError(error.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200">
       <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-10 max-w-md w-full">
         <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">Admin Login</h2>
 
-        {/* Display error message if exists */}
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-        <form 
-        // onSubmit={handleSubmit}
-        >
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
             <input
@@ -105,23 +93,15 @@ const AdminLogin = () => {
           <button
             type="submit"
             className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-semibold hover:scale-105 transition-all duration-300 disabled:opacity-50"
-            disabled={loading} // Disable button while loading
-            onClick={()=>navigate("/admindashboard")}
-            
+            disabled={loading}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-        {/* <div className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <Link to="/studentsignup" className="text-blue-500 font-semibold hover:underline">
-            Sign Up
-          </Link>
-        </div> */}
       </div>
     </div>
   );
 };
 
 export default AdminLogin;
+

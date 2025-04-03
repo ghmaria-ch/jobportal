@@ -1,356 +1,164 @@
-// // src/pages/RecruiterDashboard.jsx
-// import React from 'react';
-// import { Link } from 'react-router-dom'; // For navigation if needed
-// import Header from '../components/Header'; // Assuming Header component is already created
-
-// const RecruiterDashboard = () => {
-//   return (
-//     <div className="bg-gray-100 min-h-screen">
-//       <Header />
-//       <div className="max-w-screen-xl mx-auto p-8">
-//         {/* Dashboard Header */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h2 className="text-3xl font-semibold text-gray-800">Welcome, [Recruiter Name]!</h2>
-//           <p className="text-gray-600 mt-2">Your dashboard to manage job postings, view applications, and more.</p>
-//         </div>
-
-//         {/* Quick Stats Section */}
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-//           <div className="bg-white p-6 rounded-lg shadow-lg">
-//             <h3 className="text-xl font-semibold text-gray-700">Job Postings</h3>
-//             <p className="text-3xl font-bold text-blue-600">3</p>
-//             <p className="text-gray-600">Active Job Postings</p>
-//           </div>
-//           <div className="bg-white p-6 rounded-lg shadow-lg">
-//             <h3 className="text-xl font-semibold text-gray-700">Applications Received</h3>
-//             <p className="text-3xl font-bold text-blue-600">12</p>
-//             <p className="text-gray-600">Applications for your Jobs</p>
-//           </div>
-//           <div className="bg-white p-6 rounded-lg shadow-lg">
-//             <h3 className="text-xl font-semibold text-gray-700">Interview Scheduled</h3>
-//             <p className="text-3xl font-bold text-blue-600">5</p>
-//             <p className="text-gray-600">Upcoming Interviews</p>
-//           </div>
-//         </div>
-
-//         {/* Job Postings Section */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Manage Job Postings</h3>
-//           <div className="space-y-4">
-//             {/* Example Job Postings */}
-//             <div className="flex justify-between items-center">
-//               <div>
-//                 <h4 className="text-lg font-medium text-gray-700">Software Engineer</h4>
-//                 <p className="text-gray-500">Posted on: 10 March 2025</p>
-//               </div>
-//               <Link
-//                 to="/edit-job/1" // Link to edit job details (if created)
-//                 className="text-blue-600 hover:underline"
-//               >
-//                 Edit
-//               </Link>
-//             </div>
-//             <div className="flex justify-between items-center">
-//               <div>
-//                 <h4 className="text-lg font-medium text-gray-700">Data Analyst</h4>
-//                 <p className="text-gray-500">Posted on: 5 March 2025</p>
-//               </div>
-//               <Link
-//                 to="/edit-job/2" // Link to edit job details (if created)
-//                 className="text-blue-600 hover:underline"
-//               >
-//                 Edit
-//               </Link>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Applications Section */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Applications Received</h3>
-//           <div className="space-y-4">
-//             {/* Example Applications */}
-//             <div className="flex justify-between items-center">
-//               <div>
-//                 <h4 className="text-lg font-medium text-gray-700">John Doe - Software Engineer</h4>
-//                 <p className="text-gray-500">Applied on: 12 March 2025</p>
-//               </div>
-//               <Link
-//                 to="/view-application/1" // Assuming there's a page to view the application details
-//                 className="text-blue-600 hover:underline"
-//               >
-//                 View Application
-//               </Link>
-//             </div>
-//             <div className="flex justify-between items-center">
-//               <div>
-//                 <h4 className="text-lg font-medium text-gray-700">Jane Smith - Data Analyst</h4>
-//                 <p className="text-gray-500">Applied on: 6 March 2025</p>
-//               </div>
-//               <Link
-//                 to="/view-application/2" // Assuming there's a page to view the application details
-//                 className="text-blue-600 hover:underline"
-//               >
-//                 View Application
-//               </Link>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Profile Section */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg">
-//           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Company Profile</h3>
-//           <Link
-//             to="/edit-company-profile" // Link to edit company profile
-//             className="text-blue-600 hover:underline"
-//           >
-//             Edit Company Profile
-//           </Link>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RecruiterDashboard;
-// src/pages/RecruiterDashboard.jsx
 
 
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-// import Header from '../components/Header';
-
-// const RecruiterDashboard = () => {
-//   return (
-//     <div className="bg-gray-100 min-h-screen">
-//       <Header />
-//       <div className="max-w-screen-xl mx-auto p-8">
-//         {/* Dashboard Header */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h2 className="text-3xl font-semibold text-gray-800">Welcome, Alex!</h2>
-//           <p className="text-gray-600 mt-2">Your dashboard to manage job postings, view applications, and more.</p>
-//         </div>
-
-//         {/* Quick Stats Section */}
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-//           {[
-//             { title: "Job Postings", count: 3, subtitle: "Active Job Postings" },
-//             { title: "Applications Received", count: 12, subtitle: "Applications for your Jobs" },
-//             { title: "Interviews Scheduled", count: 5, subtitle: "Upcoming Interviews" },
-//             { title: "Hired Candidates", count: 2, subtitle: "Successfully Hired" }
-//           ].map((stat, index) => (
-//             <div key={index} className="bg-white p-6 rounded-lg shadow-lg">
-//               <h3 className="text-xl font-semibold text-gray-700">{stat.title}</h3>
-//               <p className="text-3xl font-bold text-blue-600">{stat.count}</p>
-//               <p className="text-gray-600">{stat.subtitle}</p>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Job Insights & Pipeline */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Job Posting Insights</h3>
-//           <ul className="list-disc ml-6 text-gray-700">
-//             <li>Views: 250</li>
-//             <li>Click-Through Rate: 12%</li>
-//             <li>Expiring Jobs: 1</li>
-//           </ul>
-//         </div>
-
-//         {/* Manage Job Postings */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Manage Job Postings</h3>
-//           <div className="space-y-4">
-//             {["Software Engineer", "Data Analyst"].map((job, index) => (
-//               <div key={index} className="flex justify-between items-center">
-//                 <div>
-//                   <h4 className="text-lg font-medium text-gray-700">{job}</h4>
-//                   <p className="text-gray-500">Posted on: {index === 0 ? "10 March 2025" : "5 March 2025"}</p>
-//                 </div>
-//                 <Link to={`/edit-job/${index + 1}`} className="text-blue-600 hover:underline">Edit</Link>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Applications Section */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Applications Received</h3>
-//           <div className="space-y-4">
-//             {["John Doe - Software Engineer", "Jane Smith - Data Analyst"].map((app, index) => (
-//               <div key={index} className="flex justify-between items-center">
-//                 <div>
-//                   <h4 className="text-lg font-medium text-gray-700">{app}</h4>
-//                   <p className="text-gray-500">Applied on: {index === 0 ? "12 March 2025" : "6 March 2025"}</p>
-//                 </div>
-//                 <Link to={`/view-application/${index + 1}`} className="text-blue-600 hover:underline">View Application</Link>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Notifications Section */}
-//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-//           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Notifications</h3>
-//           <ul className="list-disc ml-6 text-gray-700">
-//             <li>New application received from John Doe</li>
-//             <li>Interview scheduled for Jane Smith on 15 March</li>
-//           </ul>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RecruiterDashboard;
-
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Header from '../components/Header';
 
 const RecruiterDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [jobTitle, setJobTitle] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
-  const [jobs, setJobs] = useState([
-    { id: 1, title: 'Software Engineer', date: '10 March 2025' },
-    { id: 2, title: 'Data Analyst', date: '5 March 2025' }
-  ]);
+  const navigate = useNavigate();
+  const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Function to handle job submission
-  const handlePostJob = () => {
-    if (jobTitle.trim() === '' || jobDescription.trim() === '') return;
+  const [jobTypeFilter, setJobTypeFilter] = useState('');
+  const [skillFilter, setSkillFilter] = useState('');
 
-    const newJob = {
-      id: jobs.length + 1,
-      title: jobTitle,
-      date: new Date().toLocaleDateString()
+  const recruiterId = localStorage.getItem('recruiterId');
+  const recruiterName = localStorage.getItem('recruiterName') || 'Recruiter';
+
+  useEffect(() => {
+    if (!recruiterId) return;
+
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/job/getrecruiterjobs/${recruiterId}`);
+        setJobs(response.data);
+        setFilteredJobs(response.data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    setJobs([...jobs, newJob]);
-    setJobTitle('');
-    setJobDescription('');
-    setIsModalOpen(false);
+    fetchJobs();
+  }, [recruiterId]);
+
+  const handleDeleteJob = async (jobId) => {
+    try {
+      await axios.delete(`http://localhost:5000/job/delete/${jobId}`);
+      alert('Job deleted successfully!');
+      setJobs(jobs.filter(job => job.id !== jobId));
+      setFilteredJobs(filteredJobs.filter(job => job.id !== jobId));
+    } catch (error) {
+      console.error('Error deleting job:', error);
+      alert('Failed to delete job.');
+    }
   };
+
+  // 🔍 Apply filters
+  useEffect(() => {
+    let updatedJobs = jobs;
+
+    if (jobTypeFilter) {
+      updatedJobs = updatedJobs.filter(job => job.job_type.toLowerCase() === jobTypeFilter.toLowerCase());
+    }
+
+    if (skillFilter) {
+      updatedJobs = updatedJobs.filter(job => {
+        const skills = Array.isArray(job.required_skills)
+          ? job.required_skills
+          : JSON.parse(job.required_skills || '[]');
+        return skills.some(skill => skill.toLowerCase().includes(skillFilter.toLowerCase()));
+      });
+    }
+
+    setFilteredJobs(updatedJobs);
+  }, [jobTypeFilter, skillFilter, jobs]);
 
   return (
     <div className="bg-gray-100 min-h-screen">
       <Header />
-      <div className="max-w-screen-xl mx-auto p-8">
-        {/* Dashboard Header */}
-        <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-          <h2 className="text-3xl font-semibold text-gray-800">Welcome, Alex Johnson!</h2>
-          <p className="text-gray-600 mt-2">Your dashboard to manage job postings, view applications, and more.</p>
+      <div className="max-w-5xl mx-auto p-8">
+        {/* Welcome Message */}
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 className="text-3xl font-semibold text-gray-800">
+            Welcome, {recruiterName}! 👋
+          </h2>
+          <p className="text-gray-500">Manage your job postings efficiently.</p>
         </div>
 
-        {/* Quick Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-700">Job Postings</h3>
-            <p className="text-3xl font-bold text-blue-600">{jobs.length}</p>
-            <p className="text-gray-600">Active Job Postings</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-700">Applications Received</h3>
-            <p className="text-3xl font-bold text-blue-600">12</p>
-            <p className="text-gray-600">Applications for your Jobs</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-700">Interview Scheduled</h3>
-            <p className="text-3xl font-bold text-blue-600">5</p>
-            <p className="text-gray-600">Upcoming Interviews</p>
+        {/* Filters Section */}
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-4">Filters</h3>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Job Type Filter */}
+            <select
+              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              value={jobTypeFilter}
+              onChange={(e) => setJobTypeFilter(e.target.value)}
+            >
+              <option value="">All Job Types</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Remote">Remote</option>
+              <option value="Internship">Internship</option>
+            </select>
+
+            {/* Skill Filter */}
+            <input
+              type="text"
+              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              placeholder="Filter by Skill (e.g., React)"
+              value={skillFilter}
+              onChange={(e) => setSkillFilter(e.target.value)}
+            />
           </div>
         </div>
 
         {/* Job Postings Section */}
-        <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <div className="flex justify-between mb-4">
             <h3 className="text-2xl font-semibold text-gray-800">Manage Job Postings</h3>
             <button 
-              onClick={() => setIsModalOpen(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              onClick={() => navigate('/postajob')}
+              className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-all"
             >
-              Post a Job
+              + Post a Job
             </button>
           </div>
-          <div className="space-y-4">
-            {jobs.map((job) => (
-              <div key={job.id} className="flex justify-between items-center">
-                <div>
-                  <h4 className="text-lg font-medium text-gray-700">{job.title}</h4>
-                  <p className="text-gray-500">Posted on: {job.date}</p>
+
+          {loading ? (
+            <p className="text-gray-500">Loading jobs...</p>
+          ) : filteredJobs.length === 0 ? (
+            <p className="text-gray-500">No jobs match the selected filters.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {filteredJobs.map((job) => (
+                <div 
+                  key={job.id} 
+                  className="p-5 bg-gray-50 border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all"
+                >
+                  <div>
+                    <h4 className="text-lg font-medium text-gray-700">{job.title}</h4>
+                    <p className="text-gray-500 text-sm">
+                      <strong>Skills:</strong> {Array.isArray(job.required_skills) 
+                        ? job.required_skills.join(', ') 
+                        : JSON.parse(job.required_skills || '[]').join(', ')}
+                    </p>
+                    <p className="text-gray-500 text-sm"><strong>Location:</strong> {job.location}</p>
+                    <p className="text-gray-500 text-sm"><strong>Type:</strong> {job.job_type}</p>
+                    <p className="text-gray-500 text-sm"><strong>Salary:</strong> {job.salary || 'N/A'}</p>
+                    <p className="text-gray-500 text-sm"><strong>Posted on:</strong> {job.posted_date}</p>
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteJob(job.id)}
+                    className="mt-3 bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700 transition-all w-full"
+                  >
+                    🗑 Delete
+                  </button>
                 </div>
-                <Link to={`/edit-job/${job.id}`} className="text-blue-600 hover:underline">
-                  Edit
-                </Link>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
-
-        {/* Applications Section */}
-        <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-4">Applications Received</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h4 className="text-lg font-medium text-gray-700">John Doe - Software Engineer</h4>
-                <p className="text-gray-500">Applied on: 12 March 2025</p>
-              </div>
-              <Link to="/view-application/1" className="text-blue-600 hover:underline">
-                View Application
-              </Link>
-            </div>
-            <div className="flex justify-between items-center">
-              <div>
-                <h4 className="text-lg font-medium text-gray-700">Jane Smith - Data Analyst</h4>
-                <p className="text-gray-500">Applied on: 6 March 2025</p>
-              </div>
-              <Link to="/view-application/2" className="text-blue-600 hover:underline">
-                View Application
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Post a Job Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Post a New Job</h3>
-              <input
-                type="text"
-                placeholder="Job Title"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-                className="w-full p-2 border rounded mb-4"
-              />
-              <textarea
-                placeholder="Job Description"
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
-                className="w-full p-2 border rounded mb-4"
-              />
-              <div className="flex justify-end space-x-4">
-                <button 
-                  onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handlePostJob}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                >
-                  Post Job
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
 export default RecruiterDashboard;
+
+
+

@@ -161,62 +161,202 @@
 
 // export default StudentSignUp;
 // src/pages/StudentSignUp.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+// import React, { useState } from 'react';
+// import { Link } from 'react-router-dom';
+
+// const StudentSignUp = () => {
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     password: '',
+//     confirmPassword: '',
+//   });
+  
+
+//   const [error, setError] = useState('');
+//   const [success, setSuccess] = useState('');
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     // Password confirmation validation
+//     if (formData.password !== formData.confirmPassword) {
+//       setError("Passwords don't match.");
+//       setSuccess('');
+//       return;
+//     }
+
+//     try {
+//       const response = await fetch('http://localhost:5000/api/students/register', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           name: formData.name,
+//           email: formData.email,
+//           password: formData.password,
+//         }),
+//       });
+
+//       const data = await response.json();
+
+//       if (!response.ok) {
+//         throw new Error(data.message || 'Registration failed');
+//       }
+
+//       setSuccess('Sign-up successful! Please login.');
+//       setError('');
+//       setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+
+//     } catch (error) {
+//       setError(error.message);
+//       setSuccess('');
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+//       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+//         <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">Student Sign Up</h2>
+
+//         {/* Error message */}
+//         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+//         {success && <p className="text-green-500 text-center mb-4">{success}</p>}
+
+//         <form onSubmit={handleSubmit}>
+//           {/* Name */}
+//           <div className="mb-4">
+//             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+//             <input
+//               type="text"
+//               id="name"
+//               name="name"
+//               value={formData.name}
+//               onChange={handleChange}
+//               className="w-full p-3 border border-gray-300 rounded-lg"
+//               placeholder="Enter your full name"
+//               required
+//             />
+//           </div>
+
+//           {/* Email */}
+//           <div className="mb-4">
+//             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+//             <input
+//               type="email"
+//               id="email"
+//               name="email"
+//               value={formData.email}
+//               onChange={handleChange}
+//               className="w-full p-3 border border-gray-300 rounded-lg"
+//               placeholder="Enter your email"
+//               required
+//             />
+//           </div>
+
+//           {/* Password */}
+//           <div className="mb-4">
+//             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+//             <input
+//               type="password"
+//               id="password"
+//               name="password"
+//               value={formData.password}
+//               onChange={handleChange}
+//               className="w-full p-3 border border-gray-300 rounded-lg"
+//               placeholder="Enter your password"
+//               required
+//             />
+//           </div>
+
+//           {/* Confirm Password */}
+//           <div className="mb-6">
+//             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+//             <input
+//               type="password"
+//               id="confirmPassword"
+//               name="confirmPassword"
+//               value={formData.confirmPassword}
+//               onChange={handleChange}
+//               className="w-full p-3 border border-gray-300 rounded-lg"
+//               placeholder="Confirm your password"
+//               required
+//             />
+//           </div>
+
+//           {/* Submit Button */}
+//           <button
+//             type="submit"
+//             className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-300"
+//           >
+//             Sign Up
+//           </button>
+//         </form>
+
+//         <div className="mt-6 text-center text-sm text-gray-600">
+//           Already have an account?{' '}
+//           <Link to="/login" className="text-blue-500 hover:underline">
+//             Login
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default StudentSignUp;
+import React, { useState } from "react";
+import axios from "axios";
 
 const StudentSignUp = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "", // Added confirm password field
+    role: "student", // Automatically set role as "student"
   });
-  
 
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Password confirmation validation
+    // Validate password confirmation
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords don't match.");
-      setSuccess('');
+      setError("Passwords do not match.");
+      setSuccess("");
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/students/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
+      const response = await axios.post("http://localhost:5000/auth/signup", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
-
-      setSuccess('Sign-up successful! Please login.');
-      setError('');
-      setFormData({ name: '', email: '', password: '', confirmPassword: '' });
-
+      setSuccess("Sign-up successful! You can now log in.");
+      setError("");
+      setFormData({ name: "", email: "", password: "", confirmPassword: "", role: "student" }); // Reset form
     } catch (error) {
-      setError(error.message);
-      setSuccess('');
+      setError(error.response?.data?.message || "Registration failed");
+      setSuccess("");
     }
   };
 
@@ -225,17 +365,16 @@ const StudentSignUp = () => {
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
         <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">Student Sign Up</h2>
 
-        {/* Error message */}
+        {/* Error & Success Messages */}
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
         <form onSubmit={handleSubmit}>
           {/* Name */}
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
             <input
               type="text"
-              id="name"
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -247,10 +386,9 @@ const StudentSignUp = () => {
 
           {/* Email */}
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
             <input
               type="email"
-              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -262,10 +400,9 @@ const StudentSignUp = () => {
 
           {/* Password */}
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <input
               type="password"
-              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -277,10 +414,9 @@ const StudentSignUp = () => {
 
           {/* Confirm Password */}
           <div className="mb-6">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
             <input
               type="password"
-              id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
@@ -298,16 +434,11 @@ const StudentSignUp = () => {
             Sign Up
           </button>
         </form>
-
-        <div className="mt-6 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-500 hover:underline">
-            Login
-          </Link>
-        </div>
       </div>
     </div>
   );
 };
 
 export default StudentSignUp;
+
+

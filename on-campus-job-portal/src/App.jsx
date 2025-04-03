@@ -12,9 +12,11 @@ import StudentLogin from './pages/StudentLogin';
 import StudentDashboard from './pages/StudentDashBoard';
 import RecruiterDashboard from './pages/RecruiterDashBorad';
 import StudentProfile from './pages/StudentProfile';
-import EditProfile from './pages/EditProfile';
+import EditStudentProfile from './pages/EditStudentProfile';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import AddStudentProfile from './pages/AddStudentProfile';
+import PostAJob from "./pages/PostAJob";
 
 function App() {
   return (
@@ -33,9 +35,11 @@ function App() {
             <Route path="/studentdashboard" element={<StudentDashboard/>} />
             <Route path="/recruiterdashboard" element={<RecruiterDashboard/>} />
             <Route path="/studentprofile" element={<StudentProfile/>}/>
-            <Route path="/editprofile" element={<EditProfile/>}/>
+            <Route path="/editprofile" element={<EditStudentProfile/>}/>
             <Route path="/adminlogin" element={<AdminLogin/>}/>
             <Route path="/admindashboard" element={<AdminDashboard/>}/>
+            <Route path="/addstudentprofile" element={<AddStudentProfile/>}/>
+            <Route path="/postajob" element={<PostAJob/>}/>
           </Routes>
         </main>
       </div>

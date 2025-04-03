@@ -1,7 +1,7 @@
 
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const StudentLogin = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ const StudentLogin = () => {
   });
 
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state for login button
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,40 +26,31 @@ const StudentLogin = () => {
       return;
     }
 
-    setLoading(true); // Set loading to true when submitting the form
-    setError(''); // Reset previous errors
+    setLoading(true);
+    setError('');
 
     try {
-      // Send login credentials to the backend
-      const response = await fetch('http://localhost:5000/api/students/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData), // Send email and password
+      const response = await axios.post('http://localhost:5000/auth/login', {
+        email: formData.email,
+        password: formData.password,
+        role: 'student', // Ensure login is role-specific
       });
 
-      const data = await response.json(); // Parse the response
-
-      if (!response.ok) {
-        // If response is not ok (e.g. invalid credentials)
-        throw new Error(data.message || 'Login failed');
-      }
-
-      // Store JWT token in local storage
+      const data = response.data;
       console.log(data)
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('studentName', data.name);
-      localStorage.setItem('studentEmail',data.email);
-      localStorage.setItem('studentID',data.id)
 
-      // Redirect to the student dashboard
+      // Store JWT and user details in localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('studentName', data.user.name);
+      localStorage.setItem('studentEmail', data.user.email);
+      localStorage.setItem("studentId", data.user.id); // Keep only this one  
+
+
       navigate('/studentdashboard');
     } catch (error) {
-      // Handle error (invalid login credentials, etc.)
-      setError(error.message);
+      setError(error.response?.data?.message || 'Login failed');
     } finally {
-      setLoading(false); // Set loading to false after response
+      setLoading(false);
     }
   };
 
@@ -68,7 +59,6 @@ const StudentLogin = () => {
       <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-10 max-w-md w-full">
         <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">Student Login</h2>
 
-        {/* Display error message if exists */}
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit}>
@@ -103,7 +93,7 @@ const StudentLogin = () => {
           <button
             type="submit"
             className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-semibold hover:scale-105 transition-all duration-300 disabled:opacity-50"
-            disabled={loading} // Disable button while loading
+            disabled={loading}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -121,3 +111,4 @@ const StudentLogin = () => {
 };
 
 export default StudentLogin;
+

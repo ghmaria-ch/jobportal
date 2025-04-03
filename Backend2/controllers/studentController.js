@@ -77,6 +77,47 @@ exports.getprofile = (req, res) => {
 };
 
 
+exports.getallprofiles = (req, res) => {
+    const profileQuery = `
+        SELECT sp.id, sp.student_id, u.name, u.email, sp.degree, sp.university, sp.bio, sp.rating
+        FROM student_profiles sp
+        JOIN users u ON sp.student_id = u.id
+        WHERE u.role = 'student'
+    `;
+
+    const skillsQuery = `
+        SELECT ss.student_id, ss.skill_name, ss.course_duration, ss.course_score
+        FROM student_skills ss
+    `;
+
+    db.query(profileQuery, (err, profileResults) => {
+        if (err) return res.status(500).json({ message: "Database error", error: err });
+
+        if (profileResults.length === 0) return res.status(404).json({ message: "No student profiles found" });
+
+        db.query(skillsQuery, (err, skillsResults) => {
+            if (err) return res.status(500).json({ message: "Error fetching skills", error: err });
+
+            // Mapping skills and rating to the respective student profiles
+            const studentProfiles = profileResults.map(profile => ({
+                ...profile,
+                rating: profile.rating, // Ensure rating is included
+                skills: skillsResults
+                    .filter(skill => skill.student_id === profile.student_id)
+                    .map(skill => ({
+                        skill_name: skill.skill_name,
+                        course_duration: skill.course_duration,
+                        course_score: skill.course_score
+                    }))
+            }));
+
+            res.status(200).json({ profiles: studentProfiles });
+        });
+    });
+};
+
+
+
 
 
 exports.addprofile = (req, res) => {
@@ -155,6 +196,32 @@ exports.editprofile = (req, res) => {
                 res.status(200).json({ message: "Profile updated successfully!" });
             }
         });
+    });
+};
+
+
+// Update student rating
+exports.updatestudentrating = (req, res) => {
+    const { studentId } = req.params;
+    const { rating } = req.body;
+
+    if (!rating || rating < 0 || rating > 10) {
+        return res.status(400).json({ message: "Invalid rating. It must be between 0 and 10." });
+    }
+
+    const updateQuery = `UPDATE student_profiles SET rating = ? WHERE student_id = ?`;
+
+    db.query(updateQuery, [rating, studentId], (err, result) => {
+        if (err) {
+            console.error("Error updating rating:", err);
+            return res.status(500).json({ message: "Database error", error: err });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        res.status(200).json({ message: "Rating updated successfully!" });
     });
 };
 

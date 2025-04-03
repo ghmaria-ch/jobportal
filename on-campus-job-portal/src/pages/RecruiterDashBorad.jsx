@@ -1,7 +1,5 @@
-
-
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 
@@ -9,6 +7,7 @@ const RecruiterDashboard = () => {
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [jobTypeFilter, setJobTypeFilter] = useState('');
@@ -20,6 +19,7 @@ const RecruiterDashboard = () => {
   useEffect(() => {
     if (!recruiterId) return;
 
+    // Fetch Jobs Posted by Recruiter
     const fetchJobs = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/job/getrecruiterjobs/${recruiterId}`);
@@ -32,7 +32,18 @@ const RecruiterDashboard = () => {
       }
     };
 
+    // Fetch Applications for Recruiter Jobs
+    const fetchApplications = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/application/getapplicantsforrecruiterjobs/`);
+        setApplications(response.data.applicants);
+      } catch (error) {
+        console.error("Error fetching applications:", error);
+      }
+    };
+
     fetchJobs();
+    fetchApplications();
   }, [recruiterId]);
 
   const handleDeleteJob = async (jobId) => {
@@ -41,13 +52,30 @@ const RecruiterDashboard = () => {
       alert('Job deleted successfully!');
       setJobs(jobs.filter(job => job.id !== jobId));
       setFilteredJobs(filteredJobs.filter(job => job.id !== jobId));
+      setApplications(applications.filter(app => app.job_id !== jobId)); // Remove applications related to deleted job
     } catch (error) {
       console.error('Error deleting job:', error);
       alert('Failed to delete job.');
     }
   };
 
-  // 🔍 Apply filters
+  const handleApplicationAction = async (applicationId, action) => {
+    try {
+      await axios.put(`http://localhost:5000/application/updateapplicationstatus/${applicationId}`, { status: action });
+      alert(`Application ${action} successfully!`);
+      setApplications(applications.map(app => 
+        app.application_id === applicationId ? { ...app, application_status: action } : app
+      ));
+    } catch (error) {
+      console.error('Error updating application:', error);
+      alert('Failed to update application status.');
+    }
+  };
+
+  
+
+
+  // 🔍 Apply Filters
   useEffect(() => {
     let updatedJobs = jobs;
 
@@ -76,7 +104,7 @@ const RecruiterDashboard = () => {
           <h2 className="text-3xl font-semibold text-gray-800">
             Welcome, {recruiterName}! 👋
           </h2>
-          <p className="text-gray-500">Manage your job postings efficiently.</p>
+          <p className="text-gray-500">Manage your job postings and applications efficiently.</p>
         </div>
 
         {/* Filters Section */}
@@ -126,17 +154,10 @@ const RecruiterDashboard = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredJobs.map((job) => (
-                <div 
-                  key={job.id} 
-                  className="p-5 bg-gray-50 border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all"
-                >
+                <div key={job.id} className="p-5 bg-gray-50 border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all">
                   <div>
                     <h4 className="text-lg font-medium text-gray-700">{job.title}</h4>
-                    <p className="text-gray-500 text-sm">
-                      <strong>Skills:</strong> {Array.isArray(job.required_skills) 
-                        ? job.required_skills.join(', ') 
-                        : JSON.parse(job.required_skills || '[]').join(', ')}
-                    </p>
+                    <h4 className="text-lg font-medium text-gray-700">{job.id}</h4>
                     <p className="text-gray-500 text-sm"><strong>Location:</strong> {job.location}</p>
                     <p className="text-gray-500 text-sm"><strong>Type:</strong> {job.job_type}</p>
                     <p className="text-gray-500 text-sm"><strong>Salary:</strong> {job.salary || 'N/A'}</p>
@@ -153,12 +174,28 @@ const RecruiterDashboard = () => {
             </div>
           )}
         </div>
+
+        {/* Applications Section */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-4">Job Applications</h3>
+          {applications.length === 0 ? (
+            <p className="text-gray-500">No applications yet.</p>
+          ) : (
+            applications.map(app => (
+              <div key={app.application_id} className="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-md mb-4">
+                <p><strong>{app.student_name}</strong> applied for Job ID {app.job_id}</p>
+                <p>Email: {app.student_email}</p>
+                <p>Status: {app.application_status}</p>
+                <p>Rating: {app.rating}</p>
+                <button onClick={() => handleApplicationAction(app.application_id, 'Accepted')} className="bg-green-600 text-white px-4 py-2 mr-2 rounded-lg">✅ Accept</button>
+                <button onClick={() => handleApplicationAction(app.application_id, 'Rejected')} className="bg-red-600 text-white px-4 py-2 rounded-lg">❌ Reject</button>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export default RecruiterDashboard;
-
-
-

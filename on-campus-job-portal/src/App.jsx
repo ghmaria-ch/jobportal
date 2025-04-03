@@ -39,6 +39,7 @@ function App() {
             <Route path="/adminlogin" element={<AdminLogin/>}/>
             <Route path="/admindashboard" element={<AdminDashboard/>}/>
             <Route path="/addstudentprofile" element={<AddStudentProfile/>}/>
+            <Route path="/studentprofile/:studentId" element={<StudentProfile />} />
             <Route path="/postajob" element={<PostAJob/>}/>
           </Routes>
         </main>

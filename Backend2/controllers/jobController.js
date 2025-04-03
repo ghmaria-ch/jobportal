@@ -90,7 +90,7 @@ exports.getjobs = (req, res) => {
 };
 
 
-exports.getapplications
+
  
 exports.deletejob = async (req, res) => {
   const { jobId } = req.params;

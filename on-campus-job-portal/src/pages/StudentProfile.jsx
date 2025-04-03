@@ -1,4 +1,126 @@
 
+// import React, { useState, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import Header from '../components/Header';
+
+// const StudentProfile = () => {
+//   const navigate = useNavigate();
+//   const [studentProfile, setStudentProfile] = useState({
+//     name: 'Null',
+//     email: 'Null',
+//     degree: 'Null',
+//     university: 'Null',
+//     skills: [],
+//     bio: 'Null',
+//     is_verified: false,
+//   });
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const studentId = localStorage.getItem('studentId');
+//     const token = localStorage.getItem('token');
+
+//     if (!studentId || !token) {
+//       console.error('Missing studentID or token');
+//       navigate('/login');
+//       return;
+//     }
+
+//     const fetchStudentProfile = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:5000/student/getprofile/${studentId}`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+
+//         const profileData = response.data.profile || {};
+//         setStudentProfile({
+//           name: profileData.name || 'Null',
+//           email: profileData.email || 'Null',
+//           degree: profileData.degree || 'Null',
+//           university: profileData.university || 'Null',
+//           skills: profileData.skills || [],
+//           bio: profileData.bio || 'Null',
+//           is_verified: profileData.is_verified || false,
+//         });
+//       } catch (err) {
+//         console.error('Profile fetch error:', err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchStudentProfile();
+//   }, [navigate]);
+
+//   if (loading) return <div>Loading...</div>;
+
+//   return (
+//     <div className="bg-gray-100 min-h-screen">
+//       <Header />
+//       <div className="max-w-screen-xl mx-auto p-8">
+//         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+//           <h2 className="text-3xl font-semibold text-gray-800 mb-4">Student Profile</h2>
+//           <div className="space-y-4">
+//             <div>
+//               <h3 className="text-lg font-medium text-gray-700">Degree:</h3>
+//               <p className="text-gray-500">{studentProfile.degree}</p>
+//             </div>
+//             <div>
+//               <h3 className="text-lg font-medium text-gray-700">University:</h3>
+//               <p className="text-gray-500">{studentProfile.university}</p>
+//             </div>
+//             <div>
+//               <h3 className="text-lg font-medium text-gray-700">Skills:</h3>
+//               {studentProfile.skills.length > 0 ? (
+//                 <ul className="text-gray-500 list-disc pl-5">
+//                   {studentProfile.skills.map((skill, index) => (
+//                     <li key={index} className="flex flex-col space-y-1">
+//                       <span className="font-semibold">{skill.skill_name || 'Null'}</span>
+//                       <span>Duration: {skill.course_duration || 'N/A'}</span>
+//                       <span>Score: {skill.course_score !== null ? `${skill.course_score}/100` : 'N/A'}</span>
+//                     </li>
+//                   ))}
+//                 </ul>
+//               ) : (
+//                 <p className="text-gray-500">Null</p>
+//               )}
+//             </div>
+//             <div>
+//               <h3 className="text-lg font-medium text-gray-700">Bio:</h3>
+//               <p className="text-gray-500">{studentProfile.bio}</p>
+//             </div>
+//           </div>
+
+//           <div className="mt-6">
+//             {studentProfile.is_verified ? (
+//               <p className="text-green-600 font-semibold">Profile Verified ✅</p>
+//             ) : (
+//               <p className="text-red-600 font-semibold">Profile Not Verified ❌ (Admin approval required)</p>
+//             )}
+//           </div>
+//         </div>
+
+//         <div className="flex space-x-4">
+//           <button
+//             onClick={() => navigate('/editprofile')}
+//             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+//           >
+//             Edit Profile
+//           </button>
+//           <button
+//             onClick={() => navigate('/addstudentprofile')}
+//             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+//           >
+//             Add Profile
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default StudentProfile;
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -107,7 +229,7 @@ const StudentProfile = () => {
           </div>
 
           {/* Profile Verification Status */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             {studentProfile.is_verified ? (
               <p className="text-green-600 font-semibold flex items-center">
                 ✅ Profile Verified
@@ -117,7 +239,7 @@ const StudentProfile = () => {
                 ❌ Profile Not Verified (Admin approval required)
               </p>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Action Buttons */}

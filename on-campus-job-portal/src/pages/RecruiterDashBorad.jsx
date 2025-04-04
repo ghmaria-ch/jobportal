@@ -486,6 +486,14 @@ const RecruiterDashboard = () => {
 
   const handleApplicationAction = async (applicationId, action) => {
     try {
+      // Check if the application is already accepted or rejected
+      const application = applications.find(app => app.application_id === applicationId);
+      if (application && (application.application_status === 'Accepted' || application.application_status === 'Rejected')) {
+        alert('This application has already been processed and cannot be changed.');
+        return; // Prevent further action
+      }
+  
+      // Update the application status
       await axios.put(`http://localhost:5000/application/updateapplicationstatus/${applicationId}`, { status: action });
       alert(`Application ${action} successfully!`);
       setApplications(applications.map(app => 
@@ -496,6 +504,7 @@ const RecruiterDashboard = () => {
       alert('Failed to update application status.');
     }
   };
+  
 
   
 
@@ -605,23 +614,40 @@ const RecruiterDashboard = () => {
 
         {/* Applications Section */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-4">Job Applications</h3>
-          {applications.length === 0 ? (
-            <p className="text-gray-500">No applications yet.</p>
-          ) : (
-            applications.map(app => (
-              <div key={app.application_id} className="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-md mb-4">
-                <p><strong>{app.student_name}</strong> applied for Job ID {app.job_id}</p>
-                <p>Email: {app.student_email}</p>
-                <p>Status: {app.application_status}</p>
-                <p>Rating: {app.rating}</p>
-                <p>Skills:{app.skills}</p>
-                <button onClick={() => handleApplicationAction(app.application_id, 'Accepted')} className="bg-green-600 text-white px-4 py-2 mr-2 rounded-lg">Accept</button>
-                <button onClick={() => handleApplicationAction(app.application_id, 'Rejected')} className="bg-red-600 text-white px-4 py-2 rounded-lg">Reject</button>
-              </div>
-            ))
-          )}
-        </div>
+  <h3 className="text-2xl font-semibold text-gray-800 mb-4">Job Applications</h3>
+  {applications.length === 0 ? (
+    <p className="text-gray-500">No applications yet.</p>
+  ) : (
+    applications.map(app => (
+      <div key={app.application_id} className="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-md mb-4">
+        <p><strong>{app.student_name}</strong> applied for Job ID {app.job_id}</p>
+        <p>Email: {app.student_email}</p>
+        <p>Status: {app.application_status}</p>
+        <p>Rating: {app.rating}</p>
+        <p>Skills: {app.skills}</p>
+
+        {/* Show the "Accept" and "Reject" buttons only if the application status is not "Accepted" or "Rejected" */}
+        {app.application_status !== 'Accepted' && app.application_status !== 'Rejected' && (
+          <>
+            <button 
+              onClick={() => handleApplicationAction(app.application_id, 'Accepted')} 
+              className="bg-green-600 text-white px-4 py-2 mr-2 rounded-lg"
+            >
+              Accept
+            </button>
+            <button 
+              onClick={() => handleApplicationAction(app.application_id, 'Rejected')} 
+              className="bg-red-600 text-white px-4 py-2 rounded-lg"
+            >
+              Reject
+            </button>
+          </>
+        )}
+      </div>
+    ))
+  )}
+</div>
+
       </div>
     </div>
   );

@@ -103,7 +103,7 @@ JOIN jobs ON job_applications.job_id = jobs.id
 JOIN users ON job_applications.student_id = users.id
 LEFT JOIN student_profiles ON job_applications.student_id = student_profiles.student_id
 LEFT JOIN student_skills ON job_applications.student_id = student_skills.student_id  -- Join skills
-WHERE jobs.recruiter_id = 10
+WHERE jobs.recruiter_id = ?
 GROUP BY 
     job_applications.id, 
     job_applications.student_id, 

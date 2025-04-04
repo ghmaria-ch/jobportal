@@ -5,6 +5,6 @@ const router = express.Router();
 router.post('/apply', apply);
 router.get('/getappliedjobs/:studentId', getappliedjobs);
 router.get('/getappliedall', getappliedall);
-router.get('/getapplicantsforrecruiterjobs', getapplicantsforrecruiterjobs);
+router.get('/getapplicantsforrecruiterjobs/:recruiterId', getapplicantsforrecruiterjobs);
 router.put('/updateapplicationstatus/:applicationId', updateapplicationstatus);
 module.exports = router;

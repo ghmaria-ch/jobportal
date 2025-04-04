@@ -237,9 +237,9 @@ const PostAJob = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-50 flex items-center justify-center p-5">
-      <div className="max-w-xl bg-white p-8 rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold text-blue-700 text-center mb-6">📢 Post a Job</h2>
+    <div className="min-h-screen  flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200">
+      <div className="max-w-xl bg-white p-8 rounded-xl shadow-lg my-6">
+        <h2 className="text-3xl font-bold text-black-700 text-center mb-6">📢 Post a Job</h2>
 
         {message && <p className="text-red-500 text-center mb-4">{message}</p>}
 

@@ -27,7 +27,8 @@ const authRoutes = require("./routes/authRoutes");
 
 // Import the User model
 const User = require('./models/users');
-const studentRoutes = require("./routes/studentRoutes");  // Ensure this path is correct
+const studentRoutes = require("./routes/studentRoutes"); 
+const jobRoutes = require("./routes/jobRoutes");  // Ensure this path is correct
 
 const app = express();
 app.use(cors());
@@ -35,6 +36,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/student", studentRoutes);
+app.use("/job", jobRoutes); 
 
 
 // MongoDB connection setup

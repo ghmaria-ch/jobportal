@@ -24,11 +24,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require('dotenv').config();
 const authRoutes = require("./routes/authRoutes");
+const applicationRoutes = require("./routes/applicationRoutes")  // Ensure this path is correct
+const jobRoutes = require("./routes/jobRoutes");
+const studentRoutes = require("./routes/studentRoutes"); 
 
 // Import the User model
 const User = require('./models/users');
-const studentRoutes = require("./routes/studentRoutes"); 
-const jobRoutes = require("./routes/jobRoutes");  // Ensure this path is correct
 
 const app = express();
 app.use(cors());
@@ -37,6 +38,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/student", studentRoutes);
 app.use("/job", jobRoutes); 
+app.use("/application",applicationRoutes);//
 
 
 // MongoDB connection setup

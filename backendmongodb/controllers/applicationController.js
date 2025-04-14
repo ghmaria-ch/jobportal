@@ -28,6 +28,7 @@ exports.apply = async (req, res) => {
 };
 
 // Get applied jobs for a student
+// Get applied jobs for a student
 exports.getappliedjobs = async (req, res) => {
   const { studentId } = req.params;
 
@@ -36,14 +37,34 @@ exports.getappliedjobs = async (req, res) => {
       .populate('job_id');
 
     if (appliedJobs.length === 0) {
-      return res.status(404).json({ message: 'No jobs found for this student' });
+      return res.status(200).json({ appliedJobs: [] }); // Return empty list instead of 404
     }
 
-    res.status(200).json({ appliedJobs });
+    // Flatten the job data so frontend doesn't need to access job.job_id
+    const formattedJobs = appliedJobs.map(app => {
+      const job = app.job_id;
+
+      return {
+        id: app._id,
+        job_id: job?._id,
+        title: job?.title || "N/A",
+        location: job?.location || "N/A",
+        description: job?.description || "N/A",
+        salary: job?.salary || 0,
+        job_type: job?.job_type || "N/A",
+        required_skills: job?.required_skills || [],
+        application_status: app.application_status || "Pending",
+        created_at: app.applied_at || app.createdAt, // whichever field is correct
+      };
+    });
+
+    res.status(200).json({ appliedJobs: formattedJobs });
   } catch (err) {
+    console.error("Error in getappliedjobs:", err);
     res.status(500).json({ message: 'Server error', error: err });
   }
 };
+
 
 // Get all applications
 exports.getappliedall = async (req, res) => {

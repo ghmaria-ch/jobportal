@@ -39,6 +39,67 @@ const fs = require("fs");
 //         });
 //     });
 // };
+
+const multer = require("multer"); // 📌 Requires: Multer package must be installed
+
+// --- MULTER CONFIGURATION (Local Storage) ---
+// Define the directory where files will be stored
+const UPLOAD_DIR = path.join(__dirname, '..', 'uploads', 'certificates');
+
+// Ensure the upload directory exists
+if (!fs.existsSync(UPLOAD_DIR)) {
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, UPLOAD_DIR);
+    },
+    filename: (req, file, cb) => {
+        // Filename: timestamp_originalName (ensures unique file names)
+        cb(null, Date.now() + '_' + file.originalname);
+    }
+});
+
+// Middleware function to handle the upload 
+// It expects an array of files under the field name 'certificates' (max 5 files)
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit per file
+}).array('certificates', 5);
+
+
+// 📌 EXPORTED MIDDLEWARE: Handles file upload and subsequent JSON parsing
+exports.uploadCertificates = (req, res, next) => {
+    // 1. Run Multer's upload function
+    upload(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            // Handle Multer-specific errors (e.g., file size limit exceeded)
+            return res.status(400).json({ message: "Multer error: " + err.message });
+        } else if (err) {
+            // Handle other general errors
+            return res.status(500).json({ message: "Unknown upload error: " + err.message });
+        }
+
+        // 2. Parse the 'skills' field
+        // The frontend sends the complex 'skills' array as a JSON string when using FormData.
+        if (req.body.skills) {
+             try {
+                // Manually parse the string back into a JavaScript array/object
+                req.body.skills = JSON.parse(req.body.skills);
+            } catch (e) {
+                return res.status(400).json({ message: "Invalid JSON format for skills data." });
+            }
+        }
+        
+        // 3. Continue to the main controller logic (e.g., addprofile or editprofile)
+        // Files are available on req.files and parsed body data is on req.body
+        next();
+    });
+};
+
+
+
 exports.getprofile = (req, res) => {
     const { studentId } = req.params;
 

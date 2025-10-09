@@ -311,37 +311,84 @@ exports.addprofile = (req, res) => {
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// exports.editprofile = (req, res) => {
+//     const { studentId } = req.params;
+//     const { degree, university, bio, skills } = req.body;
+
+//     // Update student profile query
+//     const updateProfileQuery = `
+//         UPDATE student_profiles 
+//         SET degree = ?, university = ?, bio = ? 
+//         WHERE student_id = ?
+//     `;
+
+//     db.query(updateProfileQuery, [degree, university, bio, studentId], (err, result) => {
+//         if (err) return res.status(500).json({ message: "Database error", error: err });
+
+//         // Remove existing skills
+//         const deleteSkillsQuery = `DELETE FROM student_skills WHERE student_id = ?`;
+//         db.query(deleteSkillsQuery, [studentId], (err) => {
+//             if (err) return res.status(500).json({ message: "Error updating skills", error: err });
+
+//             // Insert new skills if provided
+//             if (skills.length > 0) {
+//                 const insertSkillsQuery = `
+//                     INSERT INTO student_skills (student_id, skill_name, course_duration, course_score)
+//                     VALUES ?
+//                 `;
+
+//                 const skillsValues = skills.map(skill => [studentId, skill.skill_name, skill.course_duration, skill.course_score]);
+
+//                 db.query(insertSkillsQuery, [skillsValues], (err) => {
+//                     if (err) return res.status(500).json({ message: "Error inserting new skills", error: err });
+
+//                     res.status(200).json({ message: "Profile updated successfully!" });
+//                 });
+//             } else {
+//                 res.status(200).json({ message: "Profile updated successfully!" });
+//             }
+//         });
+//     });
+// };
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.editprofile = (req, res) => {
     const { studentId } = req.params;
-    const { degree, university, bio, skills } = req.body;
+    const { degree, university, bio, skills } = req.body; // 📌 skills now contains old certificate_url
 
-    // Update student profile query
-    const updateProfileQuery = `
-        UPDATE student_profiles 
-        SET degree = ?, university = ?, bio = ? 
-        WHERE student_id = ?
-    `;
+    const uploadedFiles = req.files || []; // 📌 Get uploaded files
+
+    // ... (rest of profile update logic remains the same)
 
     db.query(updateProfileQuery, [degree, university, bio, studentId], (err, result) => {
         if (err) return res.status(500).json({ message: "Database error", error: err });
 
-        // Remove existing skills
         const deleteSkillsQuery = `DELETE FROM student_skills WHERE student_id = ?`;
         db.query(deleteSkillsQuery, [studentId], (err) => {
             if (err) return res.status(500).json({ message: "Error updating skills", error: err });
 
-            // Insert new skills if provided
             if (skills.length > 0) {
+                // 📌 Update query to include the new column
                 const insertSkillsQuery = `
-                    INSERT INTO student_skills (student_id, skill_name, course_duration, course_score)
+                    INSERT INTO student_skills (student_id, skill_name, course_duration, course_score, certificate_url)
                     VALUES ?
                 `;
 
-                const skillsValues = skills.map(skill => [studentId, skill.skill_name, skill.course_duration, skill.course_score]);
+                // 📌 Create skill values, prioritizing new file upload over old URL (if one exists in the payload)
+                const skillsValues = skills.map((skill, index) => {
+                    const file = uploadedFiles.find(f => f.fieldname === `certificates[${index}]`);
+
+                    return [
+                        studentId, 
+                        skill.skill_name, 
+                        skill.course_duration, 
+                        skill.course_score, 
+                        // Use new file path OR the old URL sent back from the frontend.
+                        file ? `/uploads/certificates/${file.filename}` : (skill.certificate_url || null)
+                    ];
+                });
 
                 db.query(insertSkillsQuery, [skillsValues], (err) => {
                     if (err) return res.status(500).json({ message: "Error inserting new skills", error: err });
-
                     res.status(200).json({ message: "Profile updated successfully!" });
                 });
             } else {
@@ -350,7 +397,7 @@ exports.editprofile = (req, res) => {
         });
     });
 };
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Update student rating
 exports.updatestudentrating = (req, res) => {

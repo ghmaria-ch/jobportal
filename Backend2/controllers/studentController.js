@@ -220,13 +220,53 @@ exports.getallprofiles = (req, res) => {
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// exports.addprofile = (req, res) => {
+//     const { student_id, degree, university, bio, skills } = req.body;
 
+//     // Check if profile already exists
+//     const checkProfileQuery = `SELECT id FROM student_profiles WHERE student_id = ?`;
+
+//     db.query(checkProfileQuery, [student_id], (err, results) => {
+//         if (err) return res.status(500).json({ message: "Database error", error: err });
+
+//         if (results.length > 0) {
+//             return res.status(400).json({ message: "Profile already exists. You cannot add another." });
+//         }
+
+//         // Insert new profile if it doesn't exist
+//         const insertProfileQuery = `
+//             INSERT INTO student_profiles (student_id, degree, university, bio, is_verified)
+//             VALUES (?, ?, ?, ?, 0)
+//         `;
+
+//         db.query(insertProfileQuery, [student_id, degree, university, bio], (err, profileResult) => {
+//             if (err) return res.status(500).json({ message: "Error inserting profile", error: err });
+
+//             // Insert skills
+//             const insertSkillsQuery = `
+//                 INSERT INTO student_skills (student_id, skill_name, course_duration, course_score)
+//                 VALUES ?
+//             `;
+
+//             const skillValues = skills.map(skill => [student_id, skill.skill_name, skill.course_duration, skill.course_score]);
+
+//             db.query(insertSkillsQuery, [skillValues], (err) => {
+//                 if (err) return res.status(500).json({ message: "Error inserting skills", error: err });
+
+//                 res.status(201).json({ message: "Profile added successfully" });
+//             });
+//         });
+//     });
+// };
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.addprofile = (req, res) => {
     const { student_id, degree, university, bio, skills } = req.body;
+    const uploadedFiles = req.files || []; // 📌 Get uploaded files
 
-    // Check if profile already exists
-    const checkProfileQuery = `SELECT id FROM student_profiles WHERE student_id = ?`;
+    // ... (rest of profile check and insert logic remains the same)
 
     db.query(checkProfileQuery, [student_id], (err, results) => {
         if (err) return res.status(500).json({ message: "Database error", error: err });
@@ -235,7 +275,6 @@ exports.addprofile = (req, res) => {
             return res.status(400).json({ message: "Profile already exists. You cannot add another." });
         }
 
-        // Insert new profile if it doesn't exist
         const insertProfileQuery = `
             INSERT INTO student_profiles (student_id, degree, university, bio, is_verified)
             VALUES (?, ?, ?, ?, 0)
@@ -244,22 +283,33 @@ exports.addprofile = (req, res) => {
         db.query(insertProfileQuery, [student_id, degree, university, bio], (err, profileResult) => {
             if (err) return res.status(500).json({ message: "Error inserting profile", error: err });
 
-            // Insert skills
+            // 📌 Update query to include the new column
             const insertSkillsQuery = `
-                INSERT INTO student_skills (student_id, skill_name, course_duration, course_score)
+                INSERT INTO student_skills (student_id, skill_name, course_duration, course_score, certificate_url)
                 VALUES ?
             `;
 
-            const skillValues = skills.map(skill => [student_id, skill.skill_name, skill.course_duration, skill.course_score]);
+            // 📌 Create skill values, mapping file array indices
+            const skillValues = skills.map((skill, index) => {
+                const file = uploadedFiles.find(f => f.fieldname === `certificates[${index}]`);
+
+                return [
+                    student_id, 
+                    skill.skill_name, 
+                    skill.course_duration, 
+                    skill.course_score, 
+                    file ? `/uploads/certificates/${file.filename}` : null // 📌 Store relative path
+                ];
+            });
 
             db.query(insertSkillsQuery, [skillValues], (err) => {
                 if (err) return res.status(500).json({ message: "Error inserting skills", error: err });
-
                 res.status(201).json({ message: "Profile added successfully" });
             });
         });
     });
 };
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 exports.editprofile = (req, res) => {
     const { studentId } = req.params;

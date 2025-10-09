@@ -98,7 +98,45 @@ exports.uploadCertificates = (req, res, next) => {
     });
 };
 
+///////////////////////////////////////////////////////////////
 
+// exports.getprofile = (req, res) => {
+//     const { studentId } = req.params;
+
+//     const profileQuery = `
+//         SELECT sp.id, sp.student_id, u.name, u.email, sp.degree, sp.university, sp.bio, sp.rating, sp.is_verified
+//         FROM student_profiles sp
+//         JOIN users u ON sp.student_id = u.id
+//         WHERE sp.student_id = ? AND u.role = 'student'
+//     `;
+
+//     const skillsQuery = `
+//         SELECT skill_name, course_duration, course_score
+//         FROM student_skills
+//         WHERE student_id = ?
+//     `;
+
+//     db.query(profileQuery, [studentId], (err, profileResults) => {
+//         if (err) return res.status(500).json({ message: "Database error", error: err });
+
+//         if (profileResults.length === 0) return res.status(404).json({ message: "Student profile not found" });
+
+//         const studentProfile = profileResults[0];
+
+//         db.query(skillsQuery, [studentId], (err, skillsResults) => {
+//             if (err) return res.status(500).json({ message: "Error fetching skills", error: err });
+
+//             studentProfile.skills = skillsResults.map(skill => ({
+//                 skill_name: skill.skill_name,
+//                 course_duration: skill.course_duration,
+//                 course_score: skill.course_score
+//             }));
+
+//             res.status(200).json({ profile: studentProfile });
+//         });
+//     });
+// };
+/////////////////////////////////////////////////////////////////////////////////////
 
 exports.getprofile = (req, res) => {
     const { studentId } = req.params;
@@ -111,7 +149,7 @@ exports.getprofile = (req, res) => {
     `;
 
     const skillsQuery = `
-        SELECT skill_name, course_duration, course_score
+        SELECT skill_name, course_duration, course_score, certificate_url 
         FROM student_skills
         WHERE student_id = ?
     `;
@@ -129,7 +167,8 @@ exports.getprofile = (req, res) => {
             studentProfile.skills = skillsResults.map(skill => ({
                 skill_name: skill.skill_name,
                 course_duration: skill.course_duration,
-                course_score: skill.course_score
+                course_score: skill.course_score,
+                certificate_url: skill.certificate_url // 📌 Include the new column
             }));
 
             res.status(200).json({ profile: studentProfile });
@@ -137,6 +176,8 @@ exports.getprofile = (req, res) => {
     });
 };
 
+
+/////////////////////////////////////////////////////////////////////////////////////
 
 exports.getallprofiles = (req, res) => {
     const profileQuery = `

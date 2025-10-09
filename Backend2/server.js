@@ -41,3 +41,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Use Auth Routes
 app.use("/auth", authRoutes);
 // ... (rest of the app.use lines remain the same)
+
+app.use("/student", studentRoutes);
+app.use("/job", jobRoutes); 
+app.use("/application",applicationRoutes);//
+
+// Start the Server
+app.listen(5000, () => {
+    console.log("Server running at http://localhost:5000");
+});

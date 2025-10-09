@@ -212,6 +212,220 @@
 // };
 
 // export default AddStudentProfile;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// import React, { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+
+// const skillOptions = [
+//   "Web Development",
+//   "Data Structures",
+//   "Machine Learning",
+//   "Cyber Security",
+//   "Cloud Computing",
+//   "Artificial Intelligence",
+//   "Database Management",
+//   "Networking"
+// ];
+
+// const AddStudentProfile = () => {
+//   const navigate = useNavigate();
+//   const studentId = localStorage.getItem("studentId");
+//   const token = localStorage.getItem("token");
+
+//   const [profileExists, setProfileExists] = useState(false);
+//   const [formData, setFormData] = useState({
+//     degree: "",
+//     university: "",
+//     bio: "",
+//     skills: [{ skill_name: "", course_duration: "", course_score: "" }]
+//   });
+
+//   useEffect(() => {
+//     const checkProfile = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:5000/student/getprofile/${studentId}`, {
+//           headers: { Authorization: `Bearer ${token}` }
+//         });
+//         if (response.data.profile) {
+//           setProfileExists(true);
+//         }
+//       } catch (error) {
+//         console.log("No profile found, user can create one.");
+//       }
+//     };
+
+//     if (studentId) checkProfile();
+//   }, [studentId, token]);
+
+//   const handleChange = (e, index, field) => {
+//     if (field) {
+//       const newSkills = [...formData.skills];
+//       newSkills[index][field] = e.target.value;
+//       setFormData({ ...formData, skills: newSkills });
+//     } else {
+//       setFormData({ ...formData, [e.target.name]: e.target.value });
+//     }
+//   };
+
+//   const addSkillField = () => {
+//     if (formData.skills.length < 5) {
+//       setFormData({
+//         ...formData,
+//         skills: [...formData.skills, { skill_name: "", course_duration: "", course_score: "" }]
+//       });
+//     }
+//   };
+
+//   const removeSkillField = (index) => {
+//     const newSkills = [...formData.skills];
+//     newSkills.splice(index, 1);
+//     setFormData({ ...formData, skills: newSkills });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await axios.post(
+//         "http://localhost:5000/student/addprofile",
+//         { student_id: studentId, ...formData },
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+//       alert(response.data.message);
+//       navigate("/studentprofile");
+//     } catch (error) {
+//       alert(error.response?.data?.message || "Error adding profile");
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200 p-6">
+//       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-3xl">
+//         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Create Your Profile</h2>
+
+//         {profileExists ? (
+//           <p className="text-center text-red-500 font-semibold text-lg">
+//             You already have a profile.
+//           </p>
+//         ) : (
+//           <form onSubmit={handleSubmit} className="space-y-6">
+//             {/* Degree */}
+//             <div>
+//               <label className="block font-semibold text-gray-700">Degree</label>
+//               <input
+//                 type="text"
+//                 name="degree"
+//                 value={formData.degree}
+//                 onChange={handleChange}
+//                 required
+//                 className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+//               />
+//             </div>
+
+//             {/* University */}
+//             <div>
+//               <label className="block font-semibold text-gray-700">University</label>
+//               <input
+//                 type="text"
+//                 name="university"
+//                 value={formData.university}
+//                 onChange={handleChange}
+//                 required
+//                 className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+//               />
+//             </div>
+
+//             {/* Bio */}
+//             <div>
+//               <label className="block font-semibold text-gray-700">Bio</label>
+//               <textarea
+//                 name="bio"
+//                 value={formData.bio}
+//                 onChange={handleChange}
+//                 required
+//                 className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+//               ></textarea>
+//             </div>
+
+//             {/* Skills Section */}
+//             <div>
+//               <h3 className="text-lg font-bold text-gray-700">Skills</h3>
+//               {formData.skills.map((skill, index) => (
+//                 <div key={index} className="p-4 border rounded-md shadow-sm mt-4 bg-gray-50">
+//                   <label className="block font-medium text-gray-700">Skill Name</label>
+//                   <select
+//                     value={skill.skill_name}
+//                     onChange={(e) => handleChange(e, index, "skill_name")}
+//                     className="w-full p-2 border rounded-md mt-1 focus:ring-2 focus:ring-blue-400"
+//                     required
+//                   >
+//                     <option value="">Select Skill</option>
+//                     {skillOptions.map((option) => (
+//                       <option key={option} value={option}>
+//                         {option}
+//                       </option>
+//                     ))}
+//                   </select>
+
+//                   <label className="block font-medium text-gray-700 mt-2">Course Duration (Months)</label>
+//                   <input
+//                     type="number"
+//                     value={skill.course_duration}
+//                     onChange={(e) => handleChange(e, index, "course_duration")}
+//                     className="w-full p-2 border rounded-md mt-1 focus:ring-2 focus:ring-blue-400"
+//                     required
+//                   />
+
+//                   <label className="block font-medium text-gray-700 mt-2">Course Score (out of 100)</label>
+//                   <input
+//                     type="number"
+//                     value={skill.course_score}
+//                     onChange={(e) => handleChange(e, index, "course_score")}
+//                     className="w-full p-2 border rounded-md mt-1 focus:ring-2 focus:ring-blue-400"
+//                     required
+//                   />
+
+//                   {formData.skills.length > 1 && (
+//                     <button
+//                       type="button"
+//                       onClick={() => removeSkillField(index)}
+//                       className="bg-red-500 text-white p-2 rounded-md mt-3 hover:bg-red-600 transition"
+//                     >
+//                       Remove Skill
+//                     </button>
+//                   )}
+//                 </div>
+//               ))}
+
+//               {formData.skills.length < 5 && (
+//                 <button
+//                   type="button"
+//                   onClick={addSkillField}
+//                   className="bg-green-500 text-white p-2 rounded-md mt-3 hover:bg-green-600 transition"
+//                 >
+//                   + Add Skill
+//                 </button>
+//               )}
+//             </div>
+
+//             {/* Submit Button */}
+//             <button
+//               type="submit"
+//               className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
+//             >
+//               Submit Profile
+//             </button>
+//           </form>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AddStudentProfile;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -237,8 +451,12 @@ const AddStudentProfile = () => {
     degree: "",
     university: "",
     bio: "",
-    skills: [{ skill_name: "", course_duration: "", course_score: "" }]
+    // Initialize skills with the new certificate_url field, though it's null on creation
+    skills: [{ skill_name: "", course_duration: "", course_score: "", certificate_url: null }] 
   });
+
+  // 📌 NEW STATE: Stores the actual File objects, indexed by skill position
+  const [certificateFiles, setCertificateFiles] = useState({});
 
   useEffect(() => {
     const checkProfile = async () => {
@@ -250,18 +468,35 @@ const AddStudentProfile = () => {
           setProfileExists(true);
         }
       } catch (error) {
-        console.log("No profile found, user can create one.");
+        // Expected error if the profile does not exist (404)
+        console.log("Profile check completed.");
       }
     };
 
     if (studentId) checkProfile();
   }, [studentId, token]);
 
+  // 📌 UPDATED handleChange to handle both text/select and file inputs
   const handleChange = (e, index, field) => {
-    if (field) {
+    if (field === "skill_name" || field === "course_duration" || field === "course_score") {
       const newSkills = [...formData.skills];
       newSkills[index][field] = e.target.value;
       setFormData({ ...formData, skills: newSkills });
+    } else if (field === "certificate_file") {
+        // 1. Get the file object
+        const file = e.target.files[0];
+        
+        // 2. Store the file object in the dedicated file state by index
+        setCertificateFiles(prev => ({
+            ...prev,
+            [index]: file
+        }));
+        
+        // 3. Clear the old URL (not needed here, but good practice if editing)
+        const newSkills = [...formData.skills];
+        newSkills[index].certificate_url = null;
+        setFormData({ ...formData, skills: newSkills });
+
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -271,7 +506,8 @@ const AddStudentProfile = () => {
     if (formData.skills.length < 5) {
       setFormData({
         ...formData,
-        skills: [...formData.skills, { skill_name: "", course_duration: "", course_score: "" }]
+        // Include certificate_url field
+        skills: [...formData.skills, { skill_name: "", course_duration: "", course_score: "", certificate_url: null }] 
       });
     }
   };
@@ -280,15 +516,50 @@ const AddStudentProfile = () => {
     const newSkills = [...formData.skills];
     newSkills.splice(index, 1);
     setFormData({ ...formData, skills: newSkills });
+    
+    // Also remove the file reference if it exists
+    setCertificateFiles(prev => {
+        const newState = {...prev};
+        delete newState[index];
+        return newState;
+    });
   };
 
+  // 📌 UPDATED handleSubmit to use FormData
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // 1. Create a new FormData object
+    const data = new FormData();
+
+    // 2. Append all simple text/data fields
+    data.append("student_id", studentId);
+    data.append("degree", formData.degree);
+    data.append("university", formData.university);
+    data.append("bio", formData.bio);
+
+    // 3. Append the skills array as a JSON string for the backend to parse
+    data.append("skills", JSON.stringify(formData.skills)); 
+    
+    // 4. Append files (CRITICAL STEP)
+    Object.keys(certificateFiles).forEach(index => {
+        const file = certificateFiles[index];
+        if (file) {
+            // The field name MUST MATCH the Multer config: 'certificates[0]', 'certificates[1]', etc.
+            data.append(`certificates[${index}]`, file);
+        }
+    });
+
     try {
       const response = await axios.post(
         "http://localhost:5000/student/addprofile",
-        { student_id: studentId, ...formData },
-        { headers: { Authorization: `Bearer ${token}` } }
+        data, // 📌 Pass FormData object instead of JSON object
+        { 
+            headers: { 
+                Authorization: `Bearer ${token}`,
+                // 📌 DO NOT set Content-Type: browser handles it for FormData
+            } 
+        }
       );
       alert(response.data.message);
       navigate("/studentprofile");
@@ -308,7 +579,7 @@ const AddStudentProfile = () => {
           </p>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Degree */}
+            {/* ... Degree, University, Bio sections remain the same ... */}
             <div>
               <label className="block font-semibold text-gray-700">Degree</label>
               <input
@@ -321,7 +592,6 @@ const AddStudentProfile = () => {
               />
             </div>
 
-            {/* University */}
             <div>
               <label className="block font-semibold text-gray-700">University</label>
               <input
@@ -334,7 +604,6 @@ const AddStudentProfile = () => {
               />
             </div>
 
-            {/* Bio */}
             <div>
               <label className="block font-semibold text-gray-700">Bio</label>
               <textarea
@@ -346,7 +615,7 @@ const AddStudentProfile = () => {
               ></textarea>
             </div>
 
-            {/* Skills Section */}
+            {/* Skills Section - UPDATED JSX */}
             <div>
               <h3 className="text-lg font-bold text-gray-700">Skills</h3>
               {formData.skills.map((skill, index) => (
@@ -382,6 +651,15 @@ const AddStudentProfile = () => {
                     onChange={(e) => handleChange(e, index, "course_score")}
                     className="w-full p-2 border rounded-md mt-1 focus:ring-2 focus:ring-blue-400"
                     required
+                  />
+                  
+                  {/* 📌 NEW FILE INPUT FIELD */}
+                  <label className="block font-medium text-gray-700 mt-2">Upload Certificate (PDF/Image)</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg"
+                    onChange={(e) => handleChange(e, index, "certificate_file")}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                   />
 
                   {formData.skills.length > 1 && (
